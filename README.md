@@ -1,45 +1,57 @@
-How to use EFCore Migrations with layers
+EF Core NullReference Exceptions
 ========================================
 
-This sample show how to use EFCore Migrations when your application is split up into seperate assemblies or
-architectural layers.
+This sample was forked from https://github.com/bricelam/Sample-SplitMigrations
 
-The layers
+Added a MyApp.Data.Tests project (xUnit)
+
+Exceptions Produced
 ----------
-This sample application is split into four assemblies.
+-System.NullReferenceException: 'Object reference not set to an instance of an object.'
+or
+-System.InvalidOperationException: 'BeginExecuteReader requires an open and available Connection. The connection's current state is closed.'
 
-Assembly         | Description
----------------- | -----------
-MyApp.Data       | Contains the `DbContext`
-MyApp.Migrations | Contains migration classes and the model snapshot
-MyApp.Models     | Contains POCO entity type classes
-MyApp.Web        | The web app. Configures the `DbContext`
+Important Note
+----------
+System.NullReferenceException: will only be throw if it is the first test run.  There's some comments in the code.
 
-Running commands
+System.NullReferenceException: 'Object reference not set to an instance of an object.' Stack Trace
 ----------------
-To run the commands, `MyApp.Migrations` should be used as the target project (**Default project** or `-Project` in PMC,
-and `--project` in CLI), and `MyApp.Web` as the startup project (`-StartupProject` in PMC, and `--startup-project` in
-CLI).
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryContext.<RegisterValueBufferCursorAsync>d__14.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.EntityFrameworkCore.Query.Internal.AsyncQueryingEnumerable.AsyncEnumerator.<BufferlessMoveNext>d__9.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.EntityFrameworkCore.Storage.Internal.SqlServerExecutionStrategy.<ExecuteAsync>d__6`2.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.EntityFrameworkCore.Query.Internal.AsyncQueryingEnumerable.AsyncEnumerator.<MoveNext>d__8.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.EntityFrameworkCore.Query.Internal.AsyncLinqOperatorProvider.SelectAsyncEnumerable`2.SelectAsyncEnumerator.<MoveNext>d__4.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.EntityFrameworkCore.Query.Internal.AsyncLinqOperatorProvider.SelectAsyncEnumerable`2.SelectAsyncEnumerator.<MoveNext>d__4.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.EntityFrameworkCore.Query.Internal.AsyncLinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.<MoveNext>d__5.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.<ToListAsync>d__129`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MyApp.Data.Tests.IntegrationTest1.<>c__DisplayClass0_0.<<MyDbContext_MultipleAsyncs_GeneratesException>b__0>d.MoveNext() in C:\Users\mdepouw\Documents\GitHub\EfCoreException\MyApp.Data.Tests\IntegrationTest1.cs:line 32
 
-```sh
-dotnet restore
-cd ./MyApp.Web/
-dotnet ef migrations add Migration2 --project ../MyApp.Migrations/
-```
-
-Points of interest
-------------------
-There are a few parts of the sample that deserve some attention.
-
-### References
-Look at the project and package references. Anywhere you see `PrivateAssets="All"`, it means that that reference should
-be available during development, but shouldn't get published to the server.
-
-### Migrations assembly
-In `Startup.ConfigureServices()`, we tell the `DbContext` where to find the migrations classes:
-
-```cs
-optionsBuilder.UseSqlServer(
-    connectionString,
-    x => x.MigrationsAssembly("MyApp.Migrations"));
-```
+Workaround that doesn't produced the System.NullReferenceException:
+----------------
+If you perform a single await first then running multiples with Task.WhenAll does not produce an exception
