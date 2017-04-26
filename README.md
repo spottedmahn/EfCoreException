@@ -56,4 +56,4 @@ System.NullReferenceException: 'Object reference not set to an instance of an ob
 
 Workaround that doesn't produced the System.NullReferenceException:
 ----------------
-If you perform a single await first then running multiples with Task.WhenAll does not produce an exception
+If you perform a single await first then running multiples with Task.WhenAll does not produce an exception.  See public async Task MyDbContext_MultipleAsyncs_NoException()
