@@ -15,7 +15,7 @@ or
 
 Important Note
 ----------
-System.NullReferenceException: will only be throw if it is the first test run.  There's some comments in the code.
+System.NullReferenceException: will only be thrown if it is the first test run.  There's some comments in the code.
 
 System.NullReferenceException: 'Object reference not set to an instance of an object.' Stack Trace
 ----------------
