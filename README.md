@@ -8,7 +8,9 @@ Added a MyApp.Data.Tests project (xUnit)
 Exceptions Produced
 ----------
 -System.NullReferenceException: 'Object reference not set to an instance of an object.'
+
 or
+
 -System.InvalidOperationException: 'BeginExecuteReader requires an open and available Connection. The connection's current state is closed.'
 
 Important Note
