@@ -17,6 +17,7 @@ System.NullReferenceException: will only be throw if it is the first test run.  
 
 System.NullReferenceException: 'Object reference not set to an instance of an object.' Stack Trace
 ----------------
+```
    at Microsoft.EntityFrameworkCore.Query.RelationalQueryContext.<RegisterValueBufferCursorAsync>d__14.MoveNext()
 --- End of stack trace from previous location where exception was thrown ---
    at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
@@ -51,6 +52,7 @@ System.NullReferenceException: 'Object reference not set to an instance of an ob
    at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
    at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
    at MyApp.Data.Tests.IntegrationTest1.<>c__DisplayClass0_0.<<MyDbContext_MultipleAsyncs_GeneratesException>b__0>d.MoveNext() in C:\Users\mdepouw\Documents\GitHub\EfCoreException\MyApp.Data.Tests\IntegrationTest1.cs:line 32
+```
 
 Workaround that doesn't produced the System.NullReferenceException:
 ----------------
