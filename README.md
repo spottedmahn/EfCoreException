@@ -1,4 +1,4 @@
-EF Core NullReference Exceptions
+EF Core NullReference Exception
 ========================================
 
 This sample was forked from https://github.com/bricelam/Sample-SplitMigrations
